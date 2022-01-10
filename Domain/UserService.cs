@@ -21,12 +21,13 @@ namespace TaskVardan.Domain
            DataContext context,
            IJwtGenerator jwtGenerator,
            SignInManager<ApplicationUser> signInManager,
-           UserManager<ApplicationUser> userManager)
+           UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _context = context;
             _jwtGenerator = jwtGenerator;
             _signInManager = signInManager;
             _userManager = userManager;
+            _mapper = mapper;
         }
         public async Task<UserDto> Login(LoginDto request)
         {
@@ -45,8 +46,7 @@ namespace TaskVardan.Domain
 
             userDto.Token = _jwtGenerator.CreateToken(user, roles.ToList());
             userDto.Roles = roles.ToList();
-
-            throw new UnauthorizedAccessException();
+            return userDto;
         }
         public async Task<UserDto> Register(RegistrationDto request)
         {
